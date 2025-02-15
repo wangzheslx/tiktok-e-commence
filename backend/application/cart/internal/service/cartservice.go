@@ -17,6 +17,93 @@ func NewCartServiceService(cc *biz.CartUsecase) *CartServiceService {
 	return &CartServiceService{cc: cc}
 }
 
+func (s *CartServiceService) CheckCartItem(ctx context.Context, req *pb.CheckCartItemReq) (*pb.CheckCartItemResp, error) {
+	resp, err := s.cc.CheckCartItem(ctx, &biz.CheckCartItemReq{
+		Owner:     req.Owner,
+		Name:      req.Name,
+		ProductId: req.ProductId,
+	})
+	if err != nil {
+		return nil, errors.New("failed to check cart item")
+	}
+	return &pb.CheckCartItemResp{
+		Success: resp.Success,
+	}, nil
+}
+
+func (s *CartServiceService) UncheckCartItem(ctx context.Context, req *pb.UncheckCartItemReq) (*pb.UncheckCartItemResp, error) {
+	resp, err := s.cc.UncheckCartItem(ctx, &biz.UncheckCartItemReq{
+		Owner:     req.Owner,
+		Name:      req.Name,
+		ProductId: req.ProductId,
+	})
+	if err != nil {
+		return nil, errors.New("failed to uncheck cart item")
+	}
+	return &pb.UncheckCartItemResp{
+		Success: resp.Success,
+	}, nil
+}
+
+func (s *CartServiceService) CreateOrder(ctx context.Context, req *pb.CreateOrderReq) (*pb.CreateOrderResp, error) {
+	resp, err := s.cc.CreateOrder(ctx, &biz.CreateOrderReq{
+		Owner: req.Owner,
+		Name:  req.Name,
+	})
+	if err != nil {
+		return nil, errors.New("failed to create order")
+	}
+	items := make([]*pb.CartItem, len(resp.Items))
+	for i, item := range resp.Items {
+		items[i] = &pb.CartItem{
+			ProductId: item.ProductId,
+			Quantity:  item.Quantity,
+			Selected:  true,
+		}
+	}
+	return &pb.CreateOrderResp{
+		Success: resp.Success,
+		Items:   items,
+	}, nil
+}
+func (s *CartServiceService) CreateCart(ctx context.Context, req *pb.CreateCartReq) (*pb.CreateCartResp, error) {
+	resp, err := s.cc.CreateCart(ctx, &biz.CreateCartReq{
+		Owner:    req.Owner,
+		Name:     req.Name,
+		CartName: req.CartName,
+	})
+	if err != nil {
+		return nil, errors.New("failed to create cart")
+	}
+	return &pb.CreateCartResp{
+		Success: resp.Success,
+		Message: resp.Message,
+	}, nil
+}
+
+func (s *CartServiceService) ListCarts(ctx context.Context, req *pb.ListCartsReq) (*pb.ListCartsResp, error) {
+	carts, err := s.cc.ListCarts(ctx, &biz.ListCartsReq{
+		Owner: req.Owner,
+		Name:  req.Name,
+	})
+	if err != nil {
+		return nil, errors.New("failed to list carts")
+	}
+	cartList := make([]*pb.Cart, len(carts.Carts))
+	for _, cart := range carts.Carts {
+		items := make([]*pb.CartItem, len(cart.Items))
+		for j, item := range cart.Items {
+			items[j] = &pb.CartItem{
+				ProductId: item.ProductId,
+				Quantity:  item.Quantity,
+			}
+		}
+	}
+	return &pb.ListCartsResp{
+		Carts: cartList,
+	}, nil
+}
+
 func (s *CartServiceService) UpsertItem(ctx context.Context, req *pb.UpsertItemReq) (*pb.UpsertItemResp, error) {
 	resp, err := s.cc.UpsertItem(ctx, &biz.UpsertItemReq{
 		Owner: req.Owner,

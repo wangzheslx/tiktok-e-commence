@@ -23,6 +23,7 @@ type CartSchemaCartItems struct {
 	CartID     int32            `json:"cartID"`
 	ProductID  int32            `json:"productID"`
 	Quantity   int32            `json:"quantity"`
+	Ischecked  bool             `json:"ischecked"`
 	CreatedAt  pgtype.Timestamp `json:"createdAt"`
 	UpdatedAt  pgtype.Timestamp `json:"updatedAt"`
 }

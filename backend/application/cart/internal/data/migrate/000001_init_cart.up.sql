@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS cart_schema.cart_items (
     cart_id INT NOT NULL,                         -- 购物车ID
     product_id INT NOT NULL,                      -- 商品ID
     quantity INT NOT NULL CHECK (quantity > 0),    -- 商品数量
+    ischecked BOOLEAN NOT NULL DEFAULT TRUE,     -- 是否选中，默认为未选中，且不能为空
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 创建时间
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 更新时间
     CONSTRAINT unique_cart_product UNIQUE(cart_id, product_id)  -- 保证每个购物车商品的唯一性

@@ -39,3 +39,40 @@ WHERE ci.cart_id =
     (SELECT c.cart_id
      FROM cart_schema.cart AS c
      WHERE c.owner = $1 AND c.name = $2 AND c.cart_name = $3);  -- 获取用户的购物车ID
+
+-- name: CheckCartItem :exec
+UPDATE cart_schema.cart_items AS ci
+SET ischecked = TRUE
+WHERE ci.cart_id = 
+    (SELECT c.cart_id
+     FROM cart_schema.cart AS c
+     WHERE c.owner = $1 AND c.name = $2 AND c.cart_name = $3 LIMIT 1) 
+    AND ci.product_id = $4;
+
+-- name: CreateCart :one
+INSERT INTO cart_schema.cart (owner, name, cart_name)
+VALUES ($1, $2, $3)
+RETURNING *;
+
+-- name: CreateOrder :many
+SELECT ci.product_id, ci.quantity
+FROM cart_schema.cart_items AS ci
+WHERE ci.cart_id = 
+    (SELECT c.cart_id
+     FROM cart_schema.cart AS c
+     WHERE c.owner = $1 AND c.name = $2 AND c.cart_name = $3 LIMIT 1) 
+    AND ci.ischecked = TRUE;
+
+-- name: ListCarts :many
+SELECT c.cart_id, c.owner, c.name, c.cart_name
+FROM cart_schema.cart AS c
+WHERE c.owner = $1 AND c.name = $2;
+
+-- name: UncheckCartItem :exec
+UPDATE cart_schema.cart_items AS ci
+SET ischecked = FALSE
+WHERE ci.cart_id = 
+    (SELECT c.cart_id
+     FROM cart_schema.cart AS c
+     WHERE c.owner = $1 AND c.name = $2 AND c.cart_name = $3 LIMIT 1) 
+    AND ci.product_id = $4;
