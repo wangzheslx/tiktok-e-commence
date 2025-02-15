@@ -67,6 +67,7 @@ service CartService {
 message CreateCartReq {
   string owner = 1;
   string name = 2;
+  string cart_name = 3 [json_name = "cart_name"];
 }
 
 message CreateCartResp {
@@ -77,6 +78,7 @@ message CreateCartResp {
 // 列出所有购物车
 message ListCartsReq {
   string owner = 1;
+  string name = 2;
 }
 
 message ListCartsResp {

@@ -201,6 +201,10 @@ paths:
                   in: query
                   schema:
                     type: string
+                - name: name
+                  in: query
+                  schema:
+                    type: string
             responses:
                 "200":
                     description: OK
@@ -286,6 +290,8 @@ components:
                 owner:
                     type: string
                 name:
+                    type: string
+                cart_name:
                     type: string
             description: 新建购物车
         CreateCartResp:
