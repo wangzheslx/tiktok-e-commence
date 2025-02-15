@@ -82,9 +82,13 @@ message ListCartsReq {
 }
 
 message ListCartsResp {
-  repeated Cart carts = 1; // 返回购物车列表
+  repeated CartSummary carts = 1; // 返回购物车列表
 }
 
+message CartSummary {
+  uint32 cart_id = 1; // 购物车ID
+  string cart_name = 2; // 购物车名称
+}
 // 选中购物车商品
 message CheckCartItemReq {
   string owner = 1;

@@ -55,7 +55,7 @@ type Querier interface {
 	GetCart(ctx context.Context, arg GetCartParams) ([]GetCartRow, error)
 	//ListCarts
 	//
-	//  SELECT c.cart_id, c.owner, c.name, c.cart_name
+	//  SELECT c.cart_id,c.cart_name
 	//  FROM cart_schema.cart AS c
 	//  WHERE c.owner = $1 AND c.name = $2
 	ListCarts(ctx context.Context, arg ListCartsParams) ([]ListCartsRow, error)

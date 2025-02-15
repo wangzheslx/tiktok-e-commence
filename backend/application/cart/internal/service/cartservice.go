@@ -89,14 +89,11 @@ func (s *CartServiceService) ListCarts(ctx context.Context, req *pb.ListCartsReq
 	if err != nil {
 		return nil, errors.New("failed to list carts")
 	}
-	cartList := make([]*pb.Cart, len(carts.Carts))
-	for _, cart := range carts.Carts {
-		items := make([]*pb.CartItem, len(cart.Items))
-		for j, item := range cart.Items {
-			items[j] = &pb.CartItem{
-				ProductId: item.ProductId,
-				Quantity:  item.Quantity,
-			}
+	cartList := make([]*pb.CartSummary, len(carts.Carts))
+	for i, cart := range carts.Carts {
+		cartList[i] = &pb.CartSummary{
+			CartId:   cart.CartId,
+			CartName: cart.CartName,
 		}
 	}
 	return &pb.ListCartsResp{

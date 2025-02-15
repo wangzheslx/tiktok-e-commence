@@ -96,6 +96,11 @@ type ListCartsReq struct {
 	Name  string `json:"name"`
 }
 
+type CartSummary struct {
+	CartId   uint32 `json:"cart_id"`   // 购物车ID
+	CartName string `json:"cart_name"` // 购物车名称
+}
+
 type ListCartsResp struct {
-	Carts []Cart `json:"carts"` // 返回购物车列表
+	Carts []CartSummary `json:"carts"` // 返回购物车列表
 }

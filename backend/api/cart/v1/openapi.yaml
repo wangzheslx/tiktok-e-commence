@@ -268,6 +268,14 @@ components:
                 selected:
                     type: boolean
             description: 购物车商品
+        CartSummary:
+            type: object
+            properties:
+                cartId:
+                    type: integer
+                    format: uint32
+                cartName:
+                    type: string
         CheckCartItemReq:
             type: object
             properties:
@@ -342,7 +350,7 @@ components:
                 carts:
                     type: array
                     items:
-                        $ref: '#/components/schemas/Cart'
+                        $ref: '#/components/schemas/CartSummary'
         RemoveCartItemResp:
             type: object
             properties:

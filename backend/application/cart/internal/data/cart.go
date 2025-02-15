@@ -88,11 +88,11 @@ func (c *cartRepo) ListCarts(ctx context.Context, req *biz.ListCartsReq) (*biz.L
 		return nil, err
 	}
 	c.log.WithContext(ctx).Infof("ListCarts resp: %+v", resp)
-	var carts []biz.Cart
+	var carts []biz.CartSummary
 	for _, cart := range resp {
-		var cartitem biz.Cart
-		cartitem.Owner = cart.Owner
-		cartitem.Name = cart.Name
+		var cartitem biz.CartSummary
+		cartitem.CartId = uint32(cart.CartID)
+		cartitem.CartName = cart.CartName
 		carts = append(carts, cartitem)
 	}
 	c.log.WithContext(ctx).Infof("ListCarts resp: %+v", carts)

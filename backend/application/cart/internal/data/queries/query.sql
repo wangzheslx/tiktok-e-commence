@@ -64,7 +64,7 @@ WHERE ci.cart_id =
     AND ci.ischecked = TRUE;
 
 -- name: ListCarts :many
-SELECT c.cart_id, c.owner, c.name, c.cart_name
+SELECT c.cart_id,c.cart_name
 FROM cart_schema.cart AS c
 WHERE c.owner = $1 AND c.name = $2;
 

@@ -203,7 +203,7 @@ func (q *Queries) GetCart(ctx context.Context, arg GetCartParams) ([]GetCartRow,
 }
 
 const ListCarts = `-- name: ListCarts :many
-SELECT c.cart_id, c.owner, c.name, c.cart_name
+SELECT c.cart_id,c.cart_name
 FROM cart_schema.cart AS c
 WHERE c.owner = $1 AND c.name = $2
 `
@@ -215,14 +215,12 @@ type ListCartsParams struct {
 
 type ListCartsRow struct {
 	CartID   int32  `json:"cartID"`
-	Owner    string `json:"owner"`
-	Name     string `json:"name"`
 	CartName string `json:"cartName"`
 }
 
 // ListCarts
 //
-//	SELECT c.cart_id, c.owner, c.name, c.cart_name
+//	SELECT c.cart_id,c.cart_name
 //	FROM cart_schema.cart AS c
 //	WHERE c.owner = $1 AND c.name = $2
 func (q *Queries) ListCarts(ctx context.Context, arg ListCartsParams) ([]ListCartsRow, error) {
@@ -234,12 +232,7 @@ func (q *Queries) ListCarts(ctx context.Context, arg ListCartsParams) ([]ListCar
 	var items []ListCartsRow
 	for rows.Next() {
 		var i ListCartsRow
-		if err := rows.Scan(
-			&i.CartID,
-			&i.Owner,
-			&i.Name,
-			&i.CartName,
-		); err != nil {
+		if err := rows.Scan(&i.CartID, &i.CartName); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
