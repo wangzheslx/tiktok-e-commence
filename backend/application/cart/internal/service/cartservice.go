@@ -3,9 +3,12 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	pb "backend/api/cart/v1"
 	"backend/application/cart/internal/biz"
+
+	"github.com/go-kratos/kratos/v2/metadata"
 )
 
 type CartServiceService struct {
@@ -118,6 +121,11 @@ func (s *CartServiceService) UpsertItem(ctx context.Context, req *pb.UpsertItemR
 	}, nil
 }
 func (s *CartServiceService) GetCart(ctx context.Context, req *pb.GetCartReq) (*pb.GetCartResp, error) {
+	var extra string
+	if md, ok := metadata.FromServerContext(ctx); ok {
+		extra = md.Get("x-md-global-userid")
+	}
+	fmt.Println(extra)
 	cart, err := s.cc.GetCart(ctx, &biz.GetCartReq{
 		Owner: req.Owner,
 		Name:  req.Name,
